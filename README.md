@@ -1,24 +1,28 @@
 Shi He  
 shihe@usc.edu  
   
-# problem1:  
-1. init, send 10 values.  
-2. output own values and 10 received values and make sure in order.  
-3. workers lock when finish own work till receive message to unlock.   
-4. loop 3 & 4 till DONE.  
-This strategy should be able to maximize the usage of msg box, and worst case won't be more than n/10.  
+# problem1
+1. Initialize and send 10 values.  
+2. Output own values and the 10 received values, and make sure they are in order.  
+3. Send another 10 values, and workers lock after finishing their own work until they receive a message to unlock.  
+4. Loop steps 3 & 4 until DONE.  
 
-# problem2:  
-1. follow requirement, complete handler class, use as a logger
-2. for each url, use loop to handle run and retry, save reason for each retry
+This strategy should be able to maximize the usage of the message box, and in the worst case it will not exceed n/10.
 
-# problem3:  
-1. check checksum and duplication
-2. if just right next last written, write
-3. if smaller than last written, write
-4. if buffer have right package, write buffer in order
-5. if buffer full, flush
-6. if buffer is about full, request for gap
+# problem2
+1. Follow the requirements, complete the handler class, and use it as a logger.  
+2. For each URL, use a loop to handle execution and retries, and save the reason for each retry.
+
+# problem3
+1. Check checksum and duplication.  
+2. If it is exactly the next packet after the last written one, write it.  
+3. If it is smaller than the last written one, write it.  
+4. If the buffer has the correct packets, write the buffer in order.  
+5. If the buffer is full, flush it.  
+6. If the buffer is about n% full, request gap information.  
+
+The choice of n depends on the delay and the balance between request rate and ordering. Since the penalty of unordered packets and requests is unknown, and the delay is also unknown, n is set to 80%.
+
 
 [//]: # (ee547-hw1-[username]/)
 
