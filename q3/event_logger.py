@@ -213,5 +213,5 @@ if __name__=='__main__':
     print(f"Coverage: {stats.packets_written}/{source.total_packets}")
     print(f"Inversions: {stats.inversions}")
     print(f"Lost in buffer: {stats.final_buffer_size}")
-    print(f'retrans: {stats.retransmit_requests}')
-    print(f'recieved re: {stats.retransmits_received}')
+    # print(f'retrans: {stats.retransmit_requests}')
+    # print(f'recieved re: {stats.retransmits_received}')
