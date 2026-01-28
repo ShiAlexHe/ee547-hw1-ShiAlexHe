@@ -2,7 +2,7 @@ from cgitb import handler
 from dataclasses import dataclass
 from pathlib import Path
 
-from problem3.message_source import MessageSource, Packet
+from message_source import MessageSource, Packet
 
 
 @dataclass
@@ -161,13 +161,13 @@ class EventLogger:
         if packet.sequence in self.written:
             return
         self.written.add(packet.sequence)
+        self.logger.packets_written += 1
         self.last_written_seq=max(self.last_written_seq,packet.sequence)
         if packet.sequence in self.pending_retransmits:
             self.status[packet.sequence] = 'RETRANSMIT'
             self.pending_retransmits.remove(packet.sequence)
         if packet.sequence not in self.status:
             self.status[packet.sequence]='OK'
-        self.logger.packets_written+=1
         if self.status[packet.sequence]=='LATE':
             self.logger.inversions+=1
         with open(self.log_file, "a") as f:
@@ -205,14 +205,13 @@ if __name__=='__main__':
         duplicate_prob=0.05,
         loss_prob=0.02,
         corruption_prob=0.03,
-        termination_rate=0.002
+        termination_prob=0.00
     )
 
     logger = EventLogger(source, Path("events.log"), buffer_size=30)
     stats = logger.run()
-    # print(stats.duplicates_discarded)
-    # print(stats.corrupted_packets)
-    print(stats.retransmit_requests)
     print(f"Coverage: {stats.packets_written}/{source.total_packets}")
     print(f"Inversions: {stats.inversions}")
     print(f"Lost in buffer: {stats.final_buffer_size}")
+    print(f'retrans: {stats.retransmit_requests}')
+    print(f'recieved re: {stats.retransmits_received}')
